@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the TranslationFields Bundle.
+ * This file is part of the Translation Fields Bundle.
  *
  * (c) Daniel Kiesel <https://github.com/iCodr8>
  *
