@@ -1,0 +1,3 @@
+services:
+#    craffft.translation_fields.util.translation_fields:
+#        class: Craffft\TranslationFieldsBundle\Util\TranslationFields
