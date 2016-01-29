@@ -1,0 +1,35 @@
+{
+    "name": "craffft/translation-fields-bundle",
+    "type": "symfony-bundle",
+    "description": "Translation fields for Contao OpenSource CMS",
+    "keywords": ["translate", "translation", "fields"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Kiesel",
+            "homepage": "https://github.com/iCodr8"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Craffft/translation-fields-bundle/issues",
+        "source": "https://github.com/Craffft/translation-fields-bundle"
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "contao/core-bundle": "~4.1",
+        "bitgrave/barcode-bundle": "~0.9"
+    },
+    "conflict": {
+        "contao/core": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Craffft\\TranslationFieldsBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "4.2.x-dev"
+        }
+    }
+}
