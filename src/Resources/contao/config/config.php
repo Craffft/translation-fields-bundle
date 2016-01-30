@@ -10,16 +10,11 @@
  */
 
 /**
- * Set global path to this module
- */
-$GLOBALS['translation-fields']['PATH'] = 'system/modules/translation-fields';
-
-/**
  * Add CSS and JavaScript files
  */
 if (TL_MODE == 'BE') {
-    $GLOBALS['TL_CSS'][] = $GLOBALS['translation-fields']['PATH'] . '/assets/css/translationfields.css';
-    $GLOBALS['TL_JAVASCRIPT'][] = $GLOBALS['translation-fields']['PATH'] . '/assets/js/translationfields.js';
+    $GLOBALS['TL_CSS'][] = 'bundles/crafffttranslationfields/css/translationfields.css';
+    $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/crafffttranslationfields/js/translationfields.js';
 }
 
 /**
@@ -53,7 +48,7 @@ array_insert($GLOBALS['BE_MOD']['system'], 7, array
     'translations' => array
     (
         'tables' => array('tl_translation_fields'),
-        'icon'   => $GLOBALS['translation-fields']['PATH'] . '/assets/images/translation-icon.png',
+        'icon'   => 'bundles/crafffttranslationfields/images/translation-icon.png',
     )
 ));
 
