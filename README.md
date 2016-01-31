@@ -170,7 +170,10 @@ Translates the field key to the translation value in the current language.
 ```php
 $intId = '1485'; // Example value
 
-$strTranslated = \TranslationFields::translateValue($intId);
+/* @var $objTranslator Translator */
+$objTranslator = \System::getContainer()->get('craffft.translation_fields.service.translator');
+
+$strTranslated = $objTranslator->translateValue($intId);
 
 echo $strTranslated; // Returns e.g. "Hi there!"
 ```
@@ -181,7 +184,10 @@ Optional you can add a force language to the translateValue method.
 $intId = '1485'; // Example value
 $strForceLanguage = 'de';
 
-$strTranslated = \TranslationFields::translateValue($intId, $strForceLanguage);
+/* @var $objTranslator Translator */
+$objTranslator = \System::getContainer()->get('craffft.translation_fields.service.translator');
+
+$strTranslated = $objTranslator->translateValue($intId, $strForceLanguage);
 
 echo $strTranslated; // Returns e.g. "Hallo zusammen!"
 ```
@@ -192,7 +198,10 @@ Translates all translation field values in the data container object to a transl
 ```php
 $objDC->exampleValue = '1485'; // Example value
 
-$objDC = \TranslationFields::translateDCObject($objDC);
+/* @var $objTranslator Translator */
+$objTranslator = \System::getContainer()->get('craffft.translation_fields.service.translator');
+
+$objDC = $objTranslator->translateDCObject($objDC);
 
 echo $objDC->exampleValue; // Returns e.g. "Hi there!"
 ```
@@ -203,7 +212,10 @@ Translates all translation field values in the data container array to a transla
 ```php
 $arrDC['exampleValue'] = '1485'; // Example value
 
-$arrDC = \TranslationFields::translateDCArray($arrDC, $strTable);
+/* @var $objTranslator Translator */
+$objTranslator = \System::getContainer()->get('craffft.translation_fields.service.translator');
+
+$arrDC = $objTranslator->translateDCArray($arrDC, $strTable);
 
 echo $arrDC['exampleValue']; // Returns e.g. "Hi there!"
 ```
@@ -218,28 +230,11 @@ You can do this like in the following code:
 ```php
 class MyApplicationRunconce extends \Controller
 {
-    // Code ...
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Code ...
-
-        // Load required translation-fields classes
-        \ClassLoader::addNamespace('TranslationFields');
-        \ClassLoader::addClass('TranslationFields\Updater', 'system/modules/translation-fields/classes/Updater.php');
-        \ClassLoader::addClass('TranslationFields\TranslationFieldsWidgetHelper', 'system/modules/translation-fields/classes/TranslationFieldsWidgetHelper.php');
-        \ClassLoader::addClass('TranslationFields\TranslationFieldsModel', 'system/modules/translation-fields/models/TranslationFieldsModel.php');
-        \ClassLoader::register();
-    }
-
-
     public function run()
     {
         // Code ...
 
-        \TranslationFields\Updater::convertTranslationField('tl_my_table_name', 'my_field_name');
+        \Craffft\TranslationFieldsBundle\Util\Updater::convertTranslationField('tl_my_table_name', 'my_field_name');
 
         // Code ...
     }
