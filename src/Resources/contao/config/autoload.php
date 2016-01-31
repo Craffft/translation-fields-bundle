@@ -23,7 +23,6 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
     // Classes
-    'TranslationFields\TranslationFieldsBackendHelper' => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/TranslationFieldsBackendHelper.php',
     'TranslationFields\TranslationFieldsWidgetHelper'  => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/TranslationFieldsWidgetHelper.php',
 
     // Driver
