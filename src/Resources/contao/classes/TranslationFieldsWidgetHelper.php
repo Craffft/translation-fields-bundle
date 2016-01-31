@@ -16,11 +16,6 @@ use Craffft\TranslationFieldsBundle\Service\Languages;
 class TranslationFieldsWidgetHelper
 {
     /**
-     * @var array
-     */
-    private static $arrLanguages = array();
-
-    /**
      * @param $varInput
      * @return array
      */
