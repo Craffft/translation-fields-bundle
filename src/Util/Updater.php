@@ -13,7 +13,7 @@ namespace Craffft\TranslationFieldsBundle\Util;
 
 use Contao\Database;
 use Craffft\TranslationFieldsBundle\Service\Languages;
-use TranslationFields\TranslationFieldsWidgetHelper;
+use TranslationFields\TranslationFieldsModel;
 
 class Updater
 {
@@ -44,7 +44,7 @@ class Updater
                 $intFid = $objRow->$backup;
             } else {
                 if (strlen($objRow->$backup) > 0) {
-                    $intFid = TranslationFieldsWidgetHelper::saveValuesAndReturnFid(
+                    $intFid = TranslationFieldsModel::saveValuesAndReturnFid(
                         $objLanguages->getLanguagesWithValue($objRow->$backup)
                     );
                 } else {

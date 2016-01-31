@@ -22,9 +22,6 @@ ClassLoader::addNamespaces(array
  */
 ClassLoader::addClasses(array
 (
-    // Classes
-    'TranslationFields\TranslationFieldsWidgetHelper'  => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/TranslationFieldsWidgetHelper.php',
-
     // Driver
     'TranslationFields\DC_Table'                       => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/driver/DC_Table.php',
 

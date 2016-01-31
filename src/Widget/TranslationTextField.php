@@ -13,6 +13,8 @@ namespace Craffft\TranslationFieldsBundle\Widget;
 
 use Contao\TextField;
 use Craffft\TranslationFieldsBundle\Service\Languages;
+use Craffft\TranslationFieldsBundle\Util\WidgetUtil;
+use TranslationFields\TranslationFieldsModel;
 
 class TranslationTextField extends TextField
 {
@@ -64,7 +66,7 @@ class TranslationTextField extends TextField
         // Check if translation fields should not be empty saved
         if (!$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
             // Fill all empty fields with the content of the fallback field
-            $varInput = \TranslationFieldsWidgetHelper::addFallbackValueToEmptyField($varInput);
+            $varInput = WidgetUtil::addFallbackValueToEmptyField($varInput);
             parent::validator($varInput);
         } else {
             // Check only the first field
@@ -75,7 +77,7 @@ class TranslationTextField extends TextField
         if (is_array($varInput)) {
             if (!parent::hasErrors()) {
                 // Save values and return fid
-                return \TranslationFieldsWidgetHelper::saveValuesAndReturnFid(
+                return TranslationFieldsModel::saveValuesAndReturnFid(
                     $varInput,
                     $intId
                 );
@@ -96,7 +98,7 @@ class TranslationTextField extends TextField
         $arrPost = \Input::post($this->strName);
 
         // Get languages array with values
-        $this->varValue = \TranslationFieldsWidgetHelper::getTranslationsByFid($this->varValue);
+        $this->varValue = TranslationFieldsModel::getTranslationsByFid($this->varValue);
 
         /* @var $objLanguages Languages */
         $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
@@ -113,15 +115,15 @@ class TranslationTextField extends TextField
                 $strLanguage,
                 $this->strId . '_' . $strLanguage,
                 specialchars((isset($arrPost[$strLanguage]) && $arrPost[$strLanguage] !== null) ? $arrPost[$strLanguage] : @$this->varValue[$strLanguage]),
-                $i > 0 ? \TranslationFieldsWidgetHelper::getCleanedAttributes($this->getAttributes()) : $this->getAttributes()
+                $i > 0 ? WidgetUtil::getCleanedAttributes($this->getAttributes()) : $this->getAttributes()
             );
         }
 
         // Get language button
-        $strLngButton = \TranslationFieldsWidgetHelper::getCurrentTranslationLanguageButton();
+        $strLngButton = WidgetUtil::getCurrentTranslationLanguageButton();
 
         // Get language list
-        $strLngList = \TranslationFieldsWidgetHelper::getTranslationLanguagesList(
+        $strLngList = WidgetUtil::getTranslationLanguagesList(
             is_array($this->varValue) ? $this->varValue : array()
         );
 
