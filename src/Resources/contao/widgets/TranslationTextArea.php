@@ -78,7 +78,10 @@ class TranslationTextArea extends \TextArea
         if (is_array($varInput)) {
             if (!parent::hasErrors()) {
                 // Save values and return fid
-                return \TranslationFieldsWidgetHelper::saveValuesAndReturnFid($varInput, $intId);
+                return \TranslationFieldsWidgetHelper::saveValuesAndReturnFid(
+                    $varInput,
+                    $intId
+                );
             }
         }
 
@@ -102,40 +105,41 @@ class TranslationTextArea extends \TextArea
 
         $arrFields = array();
 
-        for ($i = 0; $i < count($arrLngInputs); $i++) {
-            $value = $arrLngInputs[$i];
-
+        foreach ($arrLngInputs as $i => $strLanguage) {
             $strRte = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['eval']['rte'];
-            $key = 'ctrl_' . $this->strId . '_' . $value;
+            $key = 'ctrl_' . $this->strId . '_' . $strLanguage;
 
             $strScript = $this->getRteScriptByTranslatedField($strRte, $key);
 
             $arrFields[] = sprintf('<div class="tf_field_wrap tf_field_wrap_%s%s"><textarea name="%s[%s]" id="%s" class="tf_field tl_textarea" rows="%s" cols="%s"%s onfocus="Backend.getScrollOffset()">%s</textarea>%s</div>',
-                $value,
+                $strLanguage,
                 ($i > 0) ? ' hide' : '',
                 $this->strName,
-                $value,
+                $strLanguage,
                 $key,
                 $this->intRows,
                 $this->intCols,
-                $this->getAttributes(),
-                specialchars(($arrPost[$value] !== null) ? $arrPost[$value] : @$this->varValue[$value]), // see #4979
-                $strScript);
+                $i > 0 ? \TranslationFieldsWidgetHelper::getCleanedAttributes($this->getAttributes()) : $this->getAttributes(),
+                specialchars((isset($arrPost[$strLanguage]) && $arrPost[$strLanguage] !== null) ? $arrPost[$strLanguage] : @$this->varValue[$strLanguage]),
+                $strScript
+            );
         }
 
         // Get language button
         $strLngButton = \TranslationFieldsWidgetHelper::getCurrentTranslationLanguageButton();
 
         // Get language list
-        $strLngList = \TranslationFieldsWidgetHelper::getTranslationLanguagesList($this->varValue);
+        $strLngList = \TranslationFieldsWidgetHelper::getTranslationLanguagesList(
+            is_array($this->varValue) ? $this->varValue : array()
+        );
 
-        return sprintf('<div id="ctrl_%s_tf" class="tf_wrap tf_textarea_wrap%s%s">%s%s%s</div>%s',
+        return sprintf('<div id="ctrl_%s" class="tf_wrap tf_textarea_wrap%s%s">%s%s%s</div>%s',
             $this->strId,
             (($this->strClass != '') ? ' ' . $this->strClass : ''),
             (!empty($this->rte) ? ' rte' : ''),
             implode(' ', $arrFields),
-            $strLngButton,
             $strLngList,
+            $strLngButton,
             $this->wizard);
     }
 

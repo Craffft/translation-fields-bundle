@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
+define('CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH', 'bundles/crafffttranslationfields');
+
 /**
  * Add CSS and JavaScript files
  */
 if (TL_MODE == 'BE') {
-    $GLOBALS['TL_CSS'][] = 'bundles/crafffttranslationfields/css/translationfields.css';
-    $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/crafffttranslationfields/js/translationfields.js';
+    $GLOBALS['TL_CSS'][] = CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH . '/css/translationfields.css';
+    $GLOBALS['TL_JAVASCRIPT'][] = CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH . '/js/translationfields.js';
 }
 
 /**

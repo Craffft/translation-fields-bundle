@@ -58,11 +58,11 @@ class TranslationFieldsWidgetHelper extends \Backend
     }
 
     /**
-     * @param $arrValues
-     * @param null $intFid
-     * @return null
+     * @param array $arrValues
+     * @param int $intFid
+     * @return int
      */
-    public static function saveValuesAndReturnFid($arrValues, $intFid = null)
+    public static function saveValuesAndReturnFid(array $arrValues, $intFid = 0)
     {
         $arrLanguages = self::getTranslationLanguageKeys();
 
@@ -100,7 +100,9 @@ class TranslationFieldsWidgetHelper extends \Backend
                 }
 
                 // Set content value
-                $objTranslation->content = $arrValues[$strLanguage];
+                if (isset($arrValues[$strLanguage])) {
+                    $objTranslation->content = $arrValues[$strLanguage];
+                }
 
                 // Set current timestamp
                 $objTranslation->tstamp = time();
@@ -284,30 +286,30 @@ class TranslationFieldsWidgetHelper extends \Backend
         $strFlagname = (strtolower(strlen($arrLngKeys[0]) > 2 ? substr($arrLngKeys[0], -2) : $arrLngKeys[0]));
 
         // Set empty flagname, if flag doesn't exist
-        if (!file_exists(TL_ROOT . '/' . sprintf('system/modules/translation-fields/assets/images/flag-icons/%s.png',
-                $strFlagname))
+        if (!file_exists(sprintf('%s/web/%s/images/flag-icons/%s.png',
+            TL_ROOT,
+            CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH,
+            $strFlagname))
         ) {
             $strFlagname = 'xx';
         }
 
         // Generate current translation language button
-        $strButton = sprintf('<span class="tf_button"><img src="system/modules/translation-fields/assets/images/flag-icons/%s.png" width="16" height="11" alt="%s"></span>',
+        $strButton = sprintf('<span class="tf_button"><img src="%s/images/flag-icons/%s.png" width="16" height="11" alt="%s"></span>',
+            CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH,
             $strFlagname,
-            self::$arrLng[$arrLngKeys[0]]);
+            self::$arrLng[$arrLngKeys[0]]
+        );
 
         return $strButton;
     }
 
     /**
-     * @param $varValue
+     * @param array $arrItems
      * @return string
      */
-    public static function getTranslationLanguagesList($varValue)
+    public static function getTranslationLanguagesList(array $arrItems)
     {
-        if (!is_array($varValue)) {
-            $varValue = array();
-        }
-
         // Generate langauge list
         $arrLngList = array();
         $i = 0;
@@ -316,19 +318,23 @@ class TranslationFieldsWidgetHelper extends \Backend
             $strFlagname = (strtolower(strlen($key) > 2 ? substr($key, -2) : $key));
 
             // Set empty flagname, if flag doesn't exist
-            if (!file_exists(TL_ROOT . '/' . sprintf('system/modules/translation-fields/assets/images/flag-icons/%s.png',
-                    $strFlagname))
+            if (!file_exists(sprintf('%s/web/%s/images/flag-icons/%s.png',
+                TL_ROOT,
+                CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH,
+                $strFlagname))
             ) {
                 $strFlagname = 'xx';
             }
 
-            $strLngIcon = sprintf('<img src="system/modules/translation-fields/assets/images/flag-icons/%s.png" width="16" height="11" alt="%s">',
+            $strLngIcon = sprintf('<img src="%s/images/flag-icons/%s.png" width="16" height="11" alt="%s">',
+                CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH,
                 $strFlagname,
-                $value);
+                $value
+            );
 
             $arrLngList[] = sprintf('<li id="lng_list_item_%s" class="tf_lng_item%s">%s%s</li>',
                 $key,
-                (strlen(specialchars(@$varValue[$key])) > 0) ? ' translated' : '',
+                (isset($arrItems[$key]) && strlen(specialchars($arrItems[$key])) > 0) ? ' translated' : '',
                 $strLngIcon,
                 $value);
             $i++;
@@ -338,5 +344,17 @@ class TranslationFieldsWidgetHelper extends \Backend
             implode(' ', $arrLngList));
 
         return $strLngList;
+    }
+
+    /**
+     * @param $strAttributes
+     * @return string
+     */
+    public static function getCleanedAttributes($strAttributes)
+    {
+        $strAttributes = preg_replace('/(^|\W)required(=".*"|)/', '', $strAttributes);
+        $strAttributes = str_replace('  ', ' ', $strAttributes);
+
+        return $strAttributes;
     }
 }

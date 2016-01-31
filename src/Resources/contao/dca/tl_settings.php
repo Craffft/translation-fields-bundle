@@ -13,11 +13,8 @@
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'chooseTranslationLanguages';
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(
-    'inactiveModules;',
-    'inactiveModules;{translation-fields_legend},dontfillEmptyTranslationFields,chooseTranslationLanguages;',
-    $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']
-);
+
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{translation-fields_legend},dontfillEmptyTranslationFields,chooseTranslationLanguages;';
 $GLOBALS['TL_DCA']['tl_settings']['subpalettes']['chooseTranslationLanguages'] = 'translationLanguages';
 
 /**
