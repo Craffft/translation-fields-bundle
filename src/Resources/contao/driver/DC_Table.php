@@ -21,7 +21,7 @@ class DC_Table extends \Contao\DC_Table
     {
         // Define oncopy callback for every copy
         $GLOBALS['TL_DCA'][$this->strTable]['config']['oncopy_callback'][] = array(
-            '\TranslationFields\TranslationFieldsBackendHelper',
+            '\\Craffft\\TranslationFieldsBundle\\DataContainer\\Callback',
             'copyDataRecord'
         );
 
@@ -35,7 +35,7 @@ class DC_Table extends \Contao\DC_Table
     {
         // Define ondelete callback for every deltion
         $GLOBALS['TL_DCA'][$this->strTable]['config']['ondelete_callback'][] = array(
-            '\TranslationFields\TranslationFieldsBackendHelper',
+            '\\Craffft\\TranslationFieldsBundle\\DataContainer\\Callback',
             'deleteDataRecord'
         );
 
