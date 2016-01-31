@@ -102,6 +102,6 @@ $GLOBALS['BE_FFL']['TranslationTextField'] = '\\Craffft\\TranslationFieldsBundle
  */
 $GLOBALS['TL_PURGE']['tables']['translation_fields'] = array
 (
-    'callback' => array('\\TranslationFields\\Purge', 'purgeTranslationFields'),
+    'callback' => array('\\Craffft\\TranslationFieldsBundle\\Util\\Purge', 'purgeTranslationFields'),
     'affected' => array('tl_translation_fields')
 );

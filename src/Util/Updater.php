@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace TranslationFields;
+namespace Craffft\TranslationFieldsBundle\Util;
 
-class Updater extends \Controller
+use Contao\Database;
+use TranslationFields\TranslationFieldsWidgetHelper;
+
+class Updater
 {
     /**
      * @param $table
@@ -20,7 +23,7 @@ class Updater extends \Controller
     public static function convertTranslationField($table, $field)
     {
         $backup = $field . '_backup';
-        $objDatabase = \Database::getInstance();
+        $objDatabase = Database::getInstance();
 
         // Backup the original column and then change the column type
         if (!$objDatabase->fieldExists($backup, $table, true)) {
@@ -37,7 +40,7 @@ class Updater extends \Controller
                 $intFid = $objRow->$backup;
             } else {
                 if (strlen($objRow->$backup) > 0) {
-                    $intFid = \TranslationFieldsWidgetHelper::saveValuesAndReturnFid(\TranslationFieldsWidgetHelper::addValueToAllLanguages($objRow->$backup));
+                    $intFid = TranslationFieldsWidgetHelper::saveValuesAndReturnFid(TranslationFieldsWidgetHelper::addValueToAllLanguages($objRow->$backup));
                 } else {
                     $intFid = 0;
                 }

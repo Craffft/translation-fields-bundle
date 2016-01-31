@@ -23,11 +23,9 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
     // Classes
-    'TranslationFields\Purge'                          => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/Purge.php',
     'TranslationFields\TranslationFields'              => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/TranslationFields.php',
     'TranslationFields\TranslationFieldsBackendHelper' => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/TranslationFieldsBackendHelper.php',
     'TranslationFields\TranslationFieldsWidgetHelper'  => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/TranslationFieldsWidgetHelper.php',
-    'TranslationFields\Updater'                        => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/classes/Updater.php',
 
     // Driver
     'TranslationFields\DC_Table'                       => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/driver/DC_Table.php',

@@ -11,11 +11,15 @@
 
 namespace TranslationFields;
 
-class Purge extends \Controller
+use Contao\Controller;
+use Contao\Database;
+use Contao\System;
+
+class Purge
 {
     public function purgeTranslationFields()
     {
-        $database = \Database::getInstance();
+        $database = Database::getInstance();
         $arrStructure = $this->listAllTranslationFields();
         $arrFids = $this->getUsedTranslationFieldIds($arrStructure);
 
@@ -32,7 +36,7 @@ class Purge extends \Controller
      */
     protected function getUsedTranslationFieldIds($arrStructure)
     {
-        $database = \Database::getInstance();
+        $database = Database::getInstance();
         $arrFids = array();
 
         // Get used field ids
@@ -80,7 +84,7 @@ class Purge extends \Controller
         if (is_array($arrFiles)) {
             foreach ($arrFiles as $strFile) {
                 // Load data container
-                $this->loadDataContainer($strFile);
+                Controller::loadDataContainer($strFile);
 
                 $arrFields = &$GLOBALS['TL_DCA'][$strFile]['fields'];
 
@@ -105,9 +109,10 @@ class Purge extends \Controller
     protected function listDataContainerArrayFiles()
     {
         $arrFiles = array();
+        $arrActiveModules = System::getContainer()->get('kernel.bundles')->getActive();
 
         // Parse all active modules
-        foreach (\ModuleLoader::getActive() as $strModule) {
+        foreach ($arrActiveModules as $strModule) {
             $strDir = 'system/modules/' . $strModule . '/dca';
 
             if (!is_dir(TL_ROOT . '/' . $strDir)) {
