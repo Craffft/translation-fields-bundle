@@ -100,9 +100,7 @@ class TranslationFields extends \Controller
         $strTable = $objDC->current()->getTable();
 
         // Load current data container
-
-        $objTranslationController = new \TranslationController();
-        $objTranslationController->loadDataContainer($strTable);
+        \Contao\Controller::loadDataContainer($strTable);
 
         if (count($GLOBALS['TL_DCA'][$strTable]['fields']) > 0) {
             foreach ($GLOBALS['TL_DCA'][$strTable]['fields'] as $field => $arrValues) {

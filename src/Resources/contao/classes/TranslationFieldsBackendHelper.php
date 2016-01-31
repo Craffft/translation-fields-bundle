@@ -26,7 +26,6 @@ class TranslationFieldsBackendHelper extends \Backend
 
         $strTable = $dc->table;
         $strModel = '\\' . \Model::getClassFromTable($strTable);
-        $objTranslationController = new \TranslationController();
 
         // Return if the class does not exist (#9 thanks to tsarma)
         if (!class_exists($strModel)) {
@@ -41,7 +40,7 @@ class TranslationFieldsBackendHelper extends \Backend
 
             if (is_array($arrData) && count($arrData) > 0) {
                 // Load current data container
-                $objTranslationController->loadDataContainer($strTable);
+                \Contao\Controller::loadDataContainer($strTable);
 
                 foreach ($arrData as $strField => $varValue) {
                     switch ($GLOBALS['TL_DCA'][$strTable]['fields'][$strField]['inputType']) {
@@ -91,7 +90,6 @@ class TranslationFieldsBackendHelper extends \Backend
 
             $strTable = $dc->table;
             $strModel = '\\' . \Model::getClassFromTable($strTable);
-            $objTranslationController = new \TranslationController();
 
             // Return if the class does not exist (#9 thanks to tsarma)
             if (!class_exists($strModel)) {
@@ -106,7 +104,7 @@ class TranslationFieldsBackendHelper extends \Backend
 
                 if (is_array($arrData) && count($arrData) > 0) {
                     // Load current data container
-                    $objTranslationController->loadDataContainer($strTable);
+                    \Contao\Controller::loadDataContainer($strTable);
 
                     // Get tl_undo data
                     $objUndo = \Database::getInstance()->prepare("SELECT * FROM tl_undo WHERE fromTable=? ORDER BY id DESC")->limit(1)->execute($dc->table);
