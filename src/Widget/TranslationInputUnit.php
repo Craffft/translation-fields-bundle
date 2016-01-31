@@ -113,7 +113,7 @@ class TranslationInputUnit extends InputUnit
         $this->varValue['value'] = \TranslationFieldsWidgetHelper::getTranslationsByFid($this->varValue['value']);
 
         // Generate langauge fields
-        $arrLngInputs = \TranslationFieldsWidgetHelper::getInputTranslationLanguages($this->varValue['value']);
+        $arrLngInputs = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
 
         $arrFields = array();
 

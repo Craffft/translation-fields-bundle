@@ -11,12 +11,12 @@
 
 namespace TranslationFields;
 
-class TranslationFieldsWidgetHelper extends \Backend
+class TranslationFieldsWidgetHelper
 {
     /**
      * @var array
      */
-    private static $arrLng = array();
+    private static $arrLanguages = array();
 
     /**
      * @param $varInput
@@ -64,7 +64,7 @@ class TranslationFieldsWidgetHelper extends \Backend
      */
     public static function saveValuesAndReturnFid(array $arrValues, $intFid = 0)
     {
-        $arrLanguages = self::getTranslationLanguageKeys();
+        $arrLanguageKeys = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
 
         // Check if translation fields should not be empty saved
         if (!$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
@@ -72,18 +72,18 @@ class TranslationFieldsWidgetHelper extends \Backend
             $arrValues = self::addFallbackValueToEmptyField($arrValues);
         }
 
-        if (is_array($arrLanguages) && count($arrLanguages)) {
-            foreach ($arrLanguages as $strLanguage) {
+        if (is_array($arrLanguageKeys) && count($arrLanguageKeys)) {
+            foreach ($arrLanguageKeys as $strLanguageKey) {
                 // If current fid is correct
                 if (is_numeric($intFid) && $intFid > 0) {
                     // Get existing translation object by fid
-                    $objTranslation = \TranslationFieldsModel::findOneByFidAndLanguage($intFid, $strLanguage);
+                    $objTranslation = \TranslationFieldsModel::findOneByFidAndLanguage($intFid, $strLanguageKey);
 
                     // Get new translation object by fid
                     if ($objTranslation === null) {
                         // Create translation object
                         $objTranslation = new \TranslationFieldsModel();
-                        $objTranslation->language = $strLanguage;
+                        $objTranslation->language = $strLanguageKey;
                         $objTranslation->fid = $intFid;
                     }
                 }
@@ -95,13 +95,13 @@ class TranslationFieldsWidgetHelper extends \Backend
 
                     // Create translation object
                     $objTranslation = new \TranslationFieldsModel();
-                    $objTranslation->language = $strLanguage;
+                    $objTranslation->language = $strLanguageKey;
                     $objTranslation->fid = $intFid;
                 }
 
                 // Set content value
-                if (isset($arrValues[$strLanguage])) {
-                    $objTranslation->content = $arrValues[$strLanguage];
+                if (isset($arrValues[$strLanguageKey])) {
+                    $objTranslation->content = $arrValues[$strLanguageKey];
                 }
 
                 // Set current timestamp
@@ -138,11 +138,11 @@ class TranslationFieldsWidgetHelper extends \Backend
         // If only active languages should be returned
         if ($onlyActiveLanguages) {
             $arrActiveData = array();
-            $arrKeys = self::getTranslationLanguageKeys();
+            $arrLanguageKeys = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
 
-            if (is_array($arrKeys) && count($arrKeys) > 0) {
-                foreach ($arrKeys as $key) {
-                    $arrActiveData[$key] = (!isset($arrData[$key]) ? '' : $arrData[$key]);
+            if (is_array($arrLanguageKeys) && count($arrLanguageKeys) > 0) {
+                foreach ($arrLanguageKeys as $strLanguageKey) {
+                    $arrActiveData[$strLanguageKey] = (!isset($arrData[$strLanguageKey]) ? '' : $arrData[$strLanguageKey]);
                 }
             }
 
@@ -154,126 +154,19 @@ class TranslationFieldsWidgetHelper extends \Backend
         return $arrData;
     }
 
-    private static function setTranslationLanguages()
-    {
-        // Get all languages
-        $arrLanguages = \System::getLanguages();
-
-        // Get all used languages
-        $arrLng = array();
-
-        // If languages are specified
-        if ($GLOBALS['TL_CONFIG']['chooseTranslationLanguages'] == '1') {
-            $arrTranslationLanguages = deserialize($GLOBALS['TL_CONFIG']['translationLanguages']);
-
-            if (is_array($arrTranslationLanguages) && $arrTranslationLanguages > 0) {
-                foreach ($arrTranslationLanguages as $strLng) {
-                    $arrLng[$strLng] = $arrLanguages[$strLng];
-                }
-            }
-        } else {
-            $objRootPages = \TranslationFieldsPageModel::findRootPages();
-
-            if ($objRootPages !== null) {
-                while ($objRootPages->next()) {
-                    $arrLng[$objRootPages->language] = $arrLanguages[$objRootPages->language];
-                }
-            }
-
-            // If langauge array is empty
-            if (count($arrLng) < 1) {
-                // Set all available languages
-                $arrLng = \System::getLanguages(true);
-
-                // Set the language of the user to the top
-                if (\BackendUser::getInstance()->language != null) {
-                    // Get langauge value
-                    $strLngValue = $arrLng[\BackendUser::getInstance()->language];
-
-                    // Remove the current language from the array
-                    unset($arrLng[\BackendUser::getInstance()->language]);
-
-                    // Add old array to a temp array
-                    $arrLngTemp = $arrLng;
-
-                    // Generate a new array
-                    $arrLng = array(\BackendUser::getInstance()->language => $strLngValue);
-
-                    // Merge the old array into the new array
-                    $arrLng = array_merge($arrLng, $arrLngTemp);
-                }
-            }
-        }
-
-        self::$arrLng = $arrLng;
-    }
-
-    /**
-     * @param bool $blnReload
-     * @return array
-     */
-    public static function getTranslationLanguages($blnReload = false)
-    {
-        if ($blnReload || !is_array(self::$arrLng) || count(self::$arrLng) < 1) {
-            self::setTranslationLanguages();
-        }
-
-        return self::$arrLng;
-    }
-
-    /**
-     * @param bool $blnReload
-     * @return array
-     */
-    public static function getTranslationLanguageKeys($blnReload = false)
-    {
-        $arrLng = self::getTranslationLanguages($blnReload);
-
-        return array_keys($arrLng);
-    }
-
     /**
      * @param bool $blnReload
      * @return array
      */
     public static function getEmptyTranslationLanguages($blnReload = false)
     {
-        $arrLng = self::getTranslationLanguages($blnReload);
+        $arrLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguages($blnReload);
 
-        foreach ($arrLng as $k => $v) {
-            $arrLng[$k] = '';
+        foreach ($arrLanguages as $k => $v) {
+            $arrLanguages[$k] = '';
         }
 
-        return $arrLng;
-    }
-
-    /**
-     * @param $varValue
-     * @param bool $blnReload
-     * @return array
-     */
-    public static function getInputTranslationLanguages($varValue, $blnReload = false)
-    {
-        if (!is_array($varValue)) {
-            $varValue = array();
-        }
-
-        // Be sure that translation languages are loaded
-        self::getTranslationLanguages($blnReload);
-
-        // Set new inputs array
-        $arrLngInputs = self::$arrLng;
-
-        // Merge value array languages into inputs array
-        /*if (count($varValue) > 0)
-        {
-            $arrLngInputs = array_merge($arrLngInputs, $varValue);
-        }*/
-
-        // Get array keys
-        $arrLngInputs = array_keys($arrLngInputs);
-
-        return $arrLngInputs;
+        return $arrLanguages;
     }
 
     /**
@@ -282,8 +175,8 @@ class TranslationFieldsWidgetHelper extends \Backend
     public static function getCurrentTranslationLanguageButton()
     {
         // Get current translation languages
-        $arrLngKeys = array_keys(self::$arrLng);
-        $strFlagname = (strtolower(strlen($arrLngKeys[0]) > 2 ? substr($arrLngKeys[0], -2) : $arrLngKeys[0]));
+        $arrLanguageKeys = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
+        $strFlagname = (strtolower(strlen($arrLanguageKeys[0]) > 2 ? substr($arrLanguageKeys[0], -2) : $arrLanguageKeys[0]));
 
         // Set empty flagname, if flag doesn't exist
         if (!file_exists(sprintf('%s/web/%s/images/flag-icons/%s.png',
@@ -294,11 +187,13 @@ class TranslationFieldsWidgetHelper extends \Backend
             $strFlagname = 'xx';
         }
 
+        $arrLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguages();
+
         // Generate current translation language button
         $strButton = sprintf('<span class="tf_button"><img src="%s/images/flag-icons/%s.png" width="16" height="11" alt="%s"></span>',
             CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH,
             $strFlagname,
-            self::$arrLng[$arrLngKeys[0]]
+            $arrLanguages[$arrLanguageKeys[0]]
         );
 
         return $strButton;
@@ -311,10 +206,12 @@ class TranslationFieldsWidgetHelper extends \Backend
     public static function getTranslationLanguagesList(array $arrItems)
     {
         // Generate langauge list
-        $arrLngList = array();
+        $arrLanguagesList = array();
         $i = 0;
 
-        foreach (self::$arrLng as $key => $value) {
+        $arrLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguages();
+
+        foreach ($arrLanguages as $key => $value) {
             $strFlagname = (strtolower(strlen($key) > 2 ? substr($key, -2) : $key));
 
             // Set empty flagname, if flag doesn't exist
@@ -326,24 +223,24 @@ class TranslationFieldsWidgetHelper extends \Backend
                 $strFlagname = 'xx';
             }
 
-            $strLngIcon = sprintf('<img src="%s/images/flag-icons/%s.png" width="16" height="11" alt="%s">',
+            $strLanguageIcon = sprintf('<img src="%s/images/flag-icons/%s.png" width="16" height="11" alt="%s">',
                 CRAFFFT_TRANSLATION_FIELDS_PUBLIC_PATH,
                 $strFlagname,
                 $value
             );
 
-            $arrLngList[] = sprintf('<li id="lng_list_item_%s" class="tf_lng_item%s">%s%s</li>',
+            $arrLanguagesList[] = sprintf('<li id="lng_list_item_%s" class="tf_lng_item%s">%s%s</li>',
                 $key,
                 (isset($arrItems[$key]) && strlen(specialchars($arrItems[$key])) > 0) ? ' translated' : '',
-                $strLngIcon,
+                $strLanguageIcon,
                 $value);
             $i++;
         }
 
-        $strLngList = sprintf('<ul class="tf_lng_list">%s</ul>',
-            implode(' ', $arrLngList));
+        $strLanguageList = sprintf('<ul class="tf_lng_list">%s</ul>',
+            implode(' ', $arrLanguagesList));
 
-        return $strLngList;
+        return $strLanguageList;
     }
 
     /**

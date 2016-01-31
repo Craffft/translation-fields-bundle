@@ -103,7 +103,7 @@ class TranslationTextArea extends TextArea
         $this->varValue = \TranslationFieldsWidgetHelper::getTranslationsByFid($this->varValue);
 
         // Generate langauge fields
-        $arrLngInputs = \TranslationFieldsWidgetHelper::getInputTranslationLanguages($this->varValue);
+        $arrLngInputs = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
 
         $arrFields = array();
 
