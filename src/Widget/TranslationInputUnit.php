@@ -12,6 +12,7 @@
 namespace Craffft\TranslationFieldsBundle\Widget;
 
 use Contao\InputUnit;
+use Craffft\TranslationFieldsBundle\Service\Languages;
 
 class TranslationInputUnit extends InputUnit
 {
@@ -112,8 +113,9 @@ class TranslationInputUnit extends InputUnit
         // Get languages array with values
         $this->varValue['value'] = \TranslationFieldsWidgetHelper::getTranslationsByFid($this->varValue['value']);
 
-        // Generate langauge fields
-        $arrLngInputs = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
+        /* @var $objLanguages Languages */
+        $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
+        $arrLngInputs = $objLanguages->getLanguageKeys();
 
         $arrFields = array();
 

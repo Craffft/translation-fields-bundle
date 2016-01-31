@@ -11,6 +11,8 @@
 
 namespace TranslationFields;
 
+use Craffft\TranslationFieldsBundle\Service\Languages;
+
 class TranslationFieldsWidgetHelper
 {
     /**
@@ -41,20 +43,15 @@ class TranslationFieldsWidgetHelper
     }
 
     /**
-     * @param $strValue
-     * @return array
+     * @param $strAttributes
+     * @return string
      */
-    public static function addValueToAllLanguages($strValue)
+    public static function getCleanedAttributes($strAttributes)
     {
-        $arrData = self::getEmptyTranslationLanguages();
+        $strAttributes = preg_replace('/(^|\W)required(=".*"|)/', '', $strAttributes);
+        $strAttributes = str_replace('  ', ' ', $strAttributes);
 
-        if (is_array($arrData) && count($arrData) > 0) {
-            foreach ($arrData as $k => $v) {
-                $arrData[$k] = $strValue;
-            }
-        }
-
-        return $arrData;
+        return $strAttributes;
     }
 
     /**
@@ -64,7 +61,9 @@ class TranslationFieldsWidgetHelper
      */
     public static function saveValuesAndReturnFid(array $arrValues, $intFid = 0)
     {
-        $arrLanguageKeys = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
+        /* @var $objLanguages Languages */
+        $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
+        $arrLanguageKeys = $objLanguages->getLanguageKeys();
 
         // Check if translation fields should not be empty saved
         if (!$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
@@ -122,8 +121,9 @@ class TranslationFieldsWidgetHelper
      */
     public static function getTranslationsByFid($intFid, $onlyActiveLanguages = false)
     {
-        // Get empty tranlation languages
-        $arrData = self::getEmptyTranslationLanguages();
+        /* @var $objLanguages Languages */
+        $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
+        $arrData = $objLanguages->getLanguagesWithEmptyValue();
 
         if (is_numeric($intFid) && $intFid > 0) {
             $objTranslation = \TranslationFieldsModel::findByFid($intFid);
@@ -138,7 +138,7 @@ class TranslationFieldsWidgetHelper
         // If only active languages should be returned
         if ($onlyActiveLanguages) {
             $arrActiveData = array();
-            $arrLanguageKeys = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
+            $arrLanguageKeys = $objLanguages->getLanguageKeys();
 
             if (is_array($arrLanguageKeys) && count($arrLanguageKeys) > 0) {
                 foreach ($arrLanguageKeys as $strLanguageKey) {
@@ -154,28 +154,17 @@ class TranslationFieldsWidgetHelper
         return $arrData;
     }
 
-    /**
-     * @param bool $blnReload
-     * @return array
-     */
-    public static function getEmptyTranslationLanguages($blnReload = false)
-    {
-        $arrLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguages($blnReload);
 
-        foreach ($arrLanguages as $k => $v) {
-            $arrLanguages[$k] = '';
-        }
 
-        return $arrLanguages;
-    }
 
     /**
      * @return string
      */
     public static function getCurrentTranslationLanguageButton()
     {
-        // Get current translation languages
-        $arrLanguageKeys = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguageKeys();
+        /* @var $objLanguages Languages */
+        $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
+        $arrLanguageKeys = $objLanguages->getLanguageKeys();
         $strFlagname = (strtolower(strlen($arrLanguageKeys[0]) > 2 ? substr($arrLanguageKeys[0], -2) : $arrLanguageKeys[0]));
 
         // Set empty flagname, if flag doesn't exist
@@ -187,7 +176,7 @@ class TranslationFieldsWidgetHelper
             $strFlagname = 'xx';
         }
 
-        $arrLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguages();
+        $arrLanguages = $objLanguages->getLanguages();
 
         // Generate current translation language button
         $strButton = sprintf('<span class="tf_button"><img src="%s/images/flag-icons/%s.png" width="16" height="11" alt="%s"></span>',
@@ -209,7 +198,9 @@ class TranslationFieldsWidgetHelper
         $arrLanguagesList = array();
         $i = 0;
 
-        $arrLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages')->getLanguages();
+        /* @var $objLanguages Languages */
+        $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
+        $arrLanguages = $objLanguages->getLanguages();
 
         foreach ($arrLanguages as $key => $value) {
             $strFlagname = (strtolower(strlen($key) > 2 ? substr($key, -2) : $key));
@@ -241,17 +232,5 @@ class TranslationFieldsWidgetHelper
             implode(' ', $arrLanguagesList));
 
         return $strLanguageList;
-    }
-
-    /**
-     * @param $strAttributes
-     * @return string
-     */
-    public static function getCleanedAttributes($strAttributes)
-    {
-        $strAttributes = preg_replace('/(^|\W)required(=".*"|)/', '', $strAttributes);
-        $strAttributes = str_replace('  ', ' ', $strAttributes);
-
-        return $strAttributes;
     }
 }

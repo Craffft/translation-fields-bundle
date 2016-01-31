@@ -91,4 +91,36 @@ class Languages
 
         return array_keys($arrLanguages);
     }
+
+    /**
+     * @param bool $blnReload
+     * @return array
+     */
+    public function getLanguagesWithEmptyValue($blnReload = false)
+    {
+        $arrLanguages = $this->getLanguages($blnReload);
+
+        foreach ($arrLanguages as $k => $v) {
+            $arrLanguages[$k] = '';
+        }
+
+        return $arrLanguages;
+    }
+
+    /**
+     * @param $strValue
+     * @return array
+     */
+    public function getLanguagesWithValue($strValue)
+    {
+        $arrData = $this->getLanguagesWithEmptyValue();
+
+        if (is_array($arrData) && count($arrData) > 0) {
+            foreach ($arrData as $k => $v) {
+                $arrData[$k] = $strValue;
+            }
+        }
+
+        return $arrData;
+    }
 }

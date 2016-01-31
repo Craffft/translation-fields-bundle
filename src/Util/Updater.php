@@ -12,6 +12,7 @@
 namespace Craffft\TranslationFieldsBundle\Util;
 
 use Contao\Database;
+use Craffft\TranslationFieldsBundle\Service\Languages;
 use TranslationFields\TranslationFieldsWidgetHelper;
 
 class Updater
@@ -24,6 +25,9 @@ class Updater
     {
         $backup = $field . '_backup';
         $objDatabase = Database::getInstance();
+
+        /* @var $objLanguages Languages */
+        $objLanguages = \System::getContainer()->get('craffft.translation_fields.service.languages');
 
         // Backup the original column and then change the column type
         if (!$objDatabase->fieldExists($backup, $table, true)) {
@@ -40,7 +44,9 @@ class Updater
                 $intFid = $objRow->$backup;
             } else {
                 if (strlen($objRow->$backup) > 0) {
-                    $intFid = TranslationFieldsWidgetHelper::saveValuesAndReturnFid(TranslationFieldsWidgetHelper::addValueToAllLanguages($objRow->$backup));
+                    $intFid = TranslationFieldsWidgetHelper::saveValuesAndReturnFid(
+                        $objLanguages->getLanguagesWithValue($objRow->$backup)
+                    );
                 } else {
                     $intFid = 0;
                 }
