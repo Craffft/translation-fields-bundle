@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace TranslationFields;
+namespace Craffft\TranslationFieldsBundle\Widget;
 
-class TranslationInputUnit extends \InputUnit
+use Contao\InputUnit;
+
+class TranslationInputUnit extends InputUnit
 {
     protected $blnSubmitInput = true;
     protected $strTemplate = 'be_widget';

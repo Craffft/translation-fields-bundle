@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace TranslationFields;
+namespace Craffft\TranslationFieldsBundle\Widget;
 
-class TranslationTextField extends \TextField
+use Contao\TextField;
+
+class TranslationTextField extends TextField
 {
     protected $blnSubmitInput = true;
     protected $blnForAttribute = false;

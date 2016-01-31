@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace TranslationFields;
+namespace Craffft\TranslationFieldsBundle\Widget;
 
-class TranslationTextArea extends \TextArea
+use Contao\TextArea;
+
+class TranslationTextArea extends TextArea
 {
     protected $blnSubmitInput = true;
     protected $blnForAttribute = true;

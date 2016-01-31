@@ -72,9 +72,9 @@ array_insert($GLOBALS['BE_MOD']['system'], 7, array
  * field is rendered. The class "FieldClass1" has to be stored in a file named
  * "FieldClass1.php" in your module folder.
  */
-$GLOBALS['BE_FFL']['TranslationInputUnit'] = 'TranslationInputUnit';
-$GLOBALS['BE_FFL']['TranslationTextArea'] = 'TranslationTextArea';
-$GLOBALS['BE_FFL']['TranslationTextField'] = 'TranslationTextField';
+$GLOBALS['BE_FFL']['TranslationInputUnit'] = '\\Craffft\\TranslationFieldsBundle\\Widget\\TranslationInputUnit';
+$GLOBALS['BE_FFL']['TranslationTextArea'] = '\\Craffft\\TranslationFieldsBundle\\Widget\\TranslationTextArea';
+$GLOBALS['BE_FFL']['TranslationTextField'] = '\\Craffft\\TranslationFieldsBundle\\Widget\\TranslationTextField';
 
 /**
  * PURGE JOBS

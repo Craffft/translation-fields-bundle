@@ -36,9 +36,4 @@ ClassLoader::addClasses(array
     // Models
     'TranslationFields\TranslationFieldsModel'         => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/models/TranslationFieldsModel.php',
     'TranslationFields\TranslationFieldsPageModel'     => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/models/TranslationFieldsPageModel.php',
-
-    // Widgets
-    'TranslationFields\TranslationInputUnit'           => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/widgets/TranslationInputUnit.php',
-    'TranslationFields\TranslationTextArea'            => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/widgets/TranslationTextArea.php',
-    'TranslationFields\TranslationTextField'           => 'vendor/craffft/translation-fields-bundle/src/Resources/contao/widgets/TranslationTextField.php',
 ));
