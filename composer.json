@@ -16,8 +16,7 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "contao/core-bundle": "~4.1",
-        "bitgrave/barcode-bundle": "~0.9"
+        "contao/core-bundle": "~4.1"
     },
     "conflict": {
         "contao/core": "*"
