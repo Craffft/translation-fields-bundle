@@ -1,6 +1,6 @@
 {
     "name": "craffft/translation-fields-bundle",
-    "type": "symfony-bundle",
+    "type": "contao-bundle",
     "description": "Translation fields for Contao OpenSource CMS",
     "keywords": ["translate", "translation", "fields"],
     "license": "MIT",
