@@ -3,6 +3,7 @@
     "type": "contao-bundle",
     "description": "Translation fields for Contao OpenSource CMS",
     "keywords": ["translate", "translation", "fields"],
+    "homepage":"https://craffft.de",
     "license": "MIT",
     "authors": [
         {
@@ -15,20 +16,12 @@
         "source": "https://github.com/Craffft/translation-fields-bundle"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.1",
         "contao/core-bundle": "~4.1"
-    },
-    "conflict": {
-        "contao/core": "*"
     },
     "autoload": {
         "psr-4": {
             "Craffft\\TranslationFieldsBundle\\": "src/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-develop": "4.2.x-dev"
         }
     }
 }
