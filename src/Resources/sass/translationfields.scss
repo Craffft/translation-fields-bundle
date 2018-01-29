@@ -1,44 +1,13 @@
-@mixin tl_text_width($width) {
-  .tl_text {
-    width: $width;
-    padding-right: 26px;
-  }
-
-  .wizard & {
-    .tl_text {
-      width: $width - 24px;
-      padding-right: 26px;
-    }
-  }
-
-  .long & {
-    .tl_text {
-      width: $width + 351px;
-    }
-  }
-
-  .wizard.long & {
-    .tl_text {
-      width: $width + 351px - 24px;
-    }
-  }
-}
-
 .tf_wrap {
-  display: inline-block;
   position: relative;
 
   .tf_field_wrap {
-    display: inline-block;
-
     &.hide {
       display: none;
     }
 
-    @include tl_text_width(290px);
-
-    @media (min-width: 1200px) {
-      @include tl_text_width(376px);
+    .tl_text {
+      padding-right: 26px;
     }
   }
 
@@ -87,7 +56,7 @@
       }
 
       img {
-        margin: -2px 7px 0px 0px;
+        margin: -2px 7px 0 0;
         vertical-align: middle;
       }
     }
@@ -99,9 +68,9 @@
         top: 1px;
         border: 1px solid #ccc;
         border-top: none;
-        -webkit-border-radius: 0 0px 0px 3px;
-        -moz-border-radius: 0 0px 0px 3px;
-        border-radius: 0 0px 0px 3px;
+        -webkit-border-radius: 0 0 0 3px;
+        -moz-border-radius: 0 0 0 3px;
+        border-radius: 0 0 0 3px;
       }
     }
 
@@ -120,13 +89,13 @@
     .tf_lng_list {
       top: 2px;
       padding-top: 30px;
-      -webkit-border-radius: 0 3px 0px 3px;
-      -moz-border-radius: 0 3px 0px 3px;
-      border-radius: 0 3px 0px 3px;
+      -webkit-border-radius: 0 3px 0 3px;
+      -moz-border-radius: 0 3px 0 3px;
+      border-radius: 0 3px 0 3px;
 
       &.active {
         left: auto;
-        right: 0px;
+        right: 0;
       }
     }
   }

@@ -139,7 +139,7 @@ class TranslationTextArea extends TextArea
             is_array($this->varValue) ? $this->varValue : array()
         );
 
-        return sprintf('<div id="ctrl_%s" class="tf_wrap tf_textarea_wrap%s%s">%s%s%s</div>%s',
+        return sprintf('<div id="ctrl_%s_wrap" class="tf_wrap tf_textarea_wrap%s%s">%s%s%s</div>%s',
             $this->strId,
             (($this->strClass != '') ? ' ' . $this->strClass : ''),
             (!empty($this->rte) ? ' rte' : ''),
@@ -159,26 +159,33 @@ class TranslationTextArea extends TextArea
     {
         $updateMode = '';
 
-        // Replace the textarea with an RTE instance
-        if (!empty($rte)) {
+        if (!empty($rte))
+        {
             list ($file, $type) = explode('|', $rte, 2);
 
-            if (!file_exists(TL_ROOT . '/system/config/' . $file . '.php')) {
-                throw new \Exception(sprintf('Cannot find editor configuration file "%s.php"', $file));
+            $fileBrowserTypes = array();
+            $pickerBuilder = \System::getContainer()->get('contao.picker.builder');
+
+            foreach (array('file' => 'image', 'link' => 'file') as $context => $fileBrowserType)
+            {
+                if ($pickerBuilder->supportsContext($context))
+                {
+                    $fileBrowserTypes[] = $fileBrowserType;
+                }
             }
 
-            // Backwards compatibility
-            $language = substr($GLOBALS['TL_LANGUAGE'], 0, 2);
+            /** @var BackendTemplate|object $objTemplate */
+            $objTemplate = new \BackendTemplate('be_' . $file);
+            $objTemplate->selector = $selector;
+            $objTemplate->type = $type;
+            $objTemplate->fileBrowserTypes = $fileBrowserTypes;
 
-            if (!file_exists(TL_ROOT . '/assets/tinymce/langs/' . $language . '.js')) {
-                $language = 'en';
-            }
+            // Deprecated since Contao 4.0, to be removed in Contao 5.0
+            $objTemplate->language = \Backend::getTinyMceLanguage();
 
-            ob_start();
-            // $selector and $language variables are used in the included file
-            include TL_ROOT . '/system/config/' . $file . '.php';
-            $updateMode = ob_get_contents();
-            ob_end_clean();
+            $updateMode = $objTemplate->parse();
+
+            unset($file, $type, $pickerBuilder, $fileBrowserTypes, $fileBrowserType);
         }
 
         return $updateMode;
