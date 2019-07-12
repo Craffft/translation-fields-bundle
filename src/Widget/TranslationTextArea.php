@@ -126,7 +126,7 @@ class TranslationTextArea extends TextArea
                 $this->intRows,
                 $this->intCols,
                 $i > 0 ? WidgetUtil::getCleanedAttributes($this->getAttributes()) : $this->getAttributes(),
-                specialchars((isset($arrPost[$strLanguage]) && $arrPost[$strLanguage] !== null) ? $arrPost[$strLanguage] : @$this->varValue[$strLanguage]),
+                \StringUtil::specialchars((isset($arrPost[$strLanguage]) && $arrPost[$strLanguage] !== null) ? $arrPost[$strLanguage] : @$this->varValue[$strLanguage]),
                 $strScript
             );
         }

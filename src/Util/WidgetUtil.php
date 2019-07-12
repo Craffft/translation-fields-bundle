@@ -114,7 +114,7 @@ class WidgetUtil
 
             $arrLanguagesList[] = sprintf('<li id="lng_list_item_%s" class="tf_lng_item%s">%s%s</li>',
                 $key,
-                (isset($arrItems[$key]) && strlen(specialchars($arrItems[$key])) > 0) ? ' translated' : '',
+                (isset($arrItems[$key]) && strlen(\StringUtil::specialchars($arrItems[$key])) > 0) ? ' translated' : '',
                 $strLanguageIcon,
                 $value);
             $i++;

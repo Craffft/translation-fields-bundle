@@ -114,7 +114,7 @@ class TranslationTextField extends TextField
                 $this->strName,
                 $strLanguage,
                 $this->strId . '_' . $strLanguage,
-                specialchars((isset($arrPost[$strLanguage]) && $arrPost[$strLanguage] !== null) ? $arrPost[$strLanguage] : @$this->varValue[$strLanguage]),
+                \StringUtil::specialchars((isset($arrPost[$strLanguage]) && $arrPost[$strLanguage] !== null) ? $arrPost[$strLanguage] : @$this->varValue[$strLanguage]),
                 $i > 0 ? WidgetUtil::getCleanedAttributes($this->getAttributes()) : $this->getAttributes()
             );
         }
