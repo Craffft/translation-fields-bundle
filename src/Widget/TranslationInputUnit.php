@@ -69,7 +69,7 @@ class TranslationInputUnit extends InputUnit
 
         if (is_array($varInput['value'])) {
             // Check if translation fields should not be empty saved
-            if (!$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
+            if (!isset($GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) || !$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
                 // Fill all empty fields with the content of the fallback field
                 $varInput['value'] = WidgetUtil::addFallbackValueToEmptyField($varInput['value']);
                 parent::validator($varInput['value']);

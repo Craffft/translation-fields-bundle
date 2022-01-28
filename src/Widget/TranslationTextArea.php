@@ -70,7 +70,7 @@ class TranslationTextArea extends TextArea
         $intId = ($this->activeRecord) ? $this->activeRecord->{$this->strName} : $GLOBALS['TL_CONFIG'][$this->strName];
 
         // Check if translation fields should not be empty saved
-        if (!$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
+        if (!isset($GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) || !$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
             // Fill all empty fields with the content of the fallback field
             $varInput = WidgetUtil::addFallbackValueToEmptyField($varInput);
             parent::validator($varInput);

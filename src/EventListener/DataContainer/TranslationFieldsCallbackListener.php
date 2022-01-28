@@ -9,21 +9,35 @@
  * file that was distributed with this source code.
  */
 
-namespace Craffft\TranslationFieldsBundle\DataContainer;
+namespace Craffft\TranslationFieldsBundle\EventListener\DataContainer;
 
 use Contao\Controller;
+use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\Model;
 use TranslationFields\TranslationFieldsModel;
 
-class Callback
+class TranslationFieldsCallbackListener
 {
     /**
-     * @param $intId
-     * @param DataContainer $dc
+     * @Callback(table="tl_article", target="config.oncopy")
+     * @Callback(table="tl_content", target="config.oncopy")
+     * @Callback(table="tl_form", target="config.oncopy")
+     * @Callback(table="tl_form_field", target="config.oncopy")
+     * @Callback(table="tl_image_size", target="config.oncopy")
+     * @Callback(table="tl_image_size_item", target="config.oncopy")
+     * @Callback(table="tl_layout", target="config.oncopy")
+     * @Callback(table="tl_member", target="config.oncopy")
+     * @Callback(table="tl_member_group", target="config.oncopy")
+     * @Callback(table="tl_module", target="config.oncopy")
+     * @Callback(table="tl_page", target="config.oncopy")
+     * @Callback(table="tl_templates", target="config.oncopy")
+     * @Callback(table="tl_theme", target="config.oncopy")
+     * @Callback(table="tl_user", target="config.oncopy")
+     * @Callback(table="tl_user_group", target="config.oncopy")
      */
-    public static function copyDataRecord($intId, DataContainer $dc)
+    public function onCopyCallback($intId, DataContainer $dc)
     {
         // If this is not the backend than return
         if (TL_MODE != 'BE') {
@@ -31,7 +45,7 @@ class Callback
         }
 
         $strTable = $dc->table;
-        $strModel = '\\' . Model::getClassFromTable($strTable);
+        $strModel = '\\'.Model::getClassFromTable($strTable);
 
         // Return if the class does not exist (#9 thanks to tsarma)
         if (!class_exists($strModel)) {
@@ -81,9 +95,23 @@ class Callback
     }
 
     /**
-     * @param $dc
+     * @Callback(table="tl_article", target="config.ondelete")
+     * @Callback(table="tl_content", target="config.ondelete")
+     * @Callback(table="tl_form", target="config.ondelete")
+     * @Callback(table="tl_form_field", target="config.ondelete")
+     * @Callback(table="tl_image_size", target="config.ondelete")
+     * @Callback(table="tl_image_size_item", target="config.ondelete")
+     * @Callback(table="tl_layout", target="config.ondelete")
+     * @Callback(table="tl_member", target="config.ondelete")
+     * @Callback(table="tl_member_group", target="config.ondelete")
+     * @Callback(table="tl_module", target="config.ondelete")
+     * @Callback(table="tl_page", target="config.ondelete")
+     * @Callback(table="tl_templates", target="config.ondelete")
+     * @Callback(table="tl_theme", target="config.ondelete")
+     * @Callback(table="tl_user", target="config.ondelete")
+     * @Callback(table="tl_user_group", target="config.ondelete")
      */
-    public static function deleteDataRecord($dc)
+    public function onDeleteCallback($dc)
     {
         // If this is not the backend than return
         if (TL_MODE != 'BE') {
@@ -95,7 +123,7 @@ class Callback
             $intId = $dc->activeRecord->id;
 
             $strTable = $dc->table;
-            $strModel = '\\' . Model::getClassFromTable($strTable);
+            $strModel = '\\'.Model::getClassFromTable($strTable);
 
             // Return if the class does not exist (#9 thanks to tsarma)
             if (!class_exists($strModel)) {
@@ -113,7 +141,9 @@ class Callback
                     Controller::loadDataContainer($strTable);
 
                     // Get tl_undo data
-                    $objUndo = Database::getInstance()->prepare("SELECT * FROM tl_undo WHERE fromTable=? ORDER BY id DESC")->limit(1)->execute($dc->table);
+                    $objUndo = Database::getInstance()->prepare(
+                        "SELECT * FROM tl_undo WHERE fromTable=? ORDER BY id DESC"
+                    )->limit(1)->execute($dc->table);
                     $arrSet = $objUndo->row();
 
                     // Deserialize tl_undo data
@@ -155,7 +185,9 @@ class Callback
                     $arrSet['data'] = serialize($arrSet['data']);
 
                     // Update tl_undo
-                    Database::getInstance()->prepare("UPDATE tl_undo %s WHERE id=?")->set($arrSet)->execute($objUndo->id);
+                    Database::getInstance()->prepare("UPDATE tl_undo %s WHERE id=?")->set($arrSet)->execute(
+                        $objUndo->id
+                    );
                 }
             }
         }

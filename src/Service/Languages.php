@@ -33,7 +33,7 @@ class Languages
             $arrLanguages = array();
 
             // If languages are specified
-            if ($GLOBALS['TL_CONFIG']['chooseTranslationLanguages'] == '1') {
+            if (isset($GLOBALS['TL_CONFIG']['chooseTranslationLanguages']) && $GLOBALS['TL_CONFIG']['chooseTranslationLanguages'] == '1') {
                 $arrTranslationLanguages = deserialize($GLOBALS['TL_CONFIG']['translationLanguages']);
 
                 if (is_array($arrTranslationLanguages) && $arrTranslationLanguages > 0) {

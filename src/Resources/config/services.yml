@@ -1,6 +1,8 @@
 services:
     craffft.translation_fields.service.languages:
         class: Craffft\TranslationFieldsBundle\Service\Languages
+        public: true
 
     craffft.translation_fields.service.translator:
         class: Craffft\TranslationFieldsBundle\Service\Translator
+        public: true

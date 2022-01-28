@@ -58,12 +58,14 @@ class TranslationFieldsModel extends \Model
         $arrLanguageKeys = $objLanguages->getLanguageKeys();
 
         // Check if translation fields should not be empty saved
-        if (!$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
+        if (!isset($GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) || !$GLOBALS['TL_CONFIG']['dontfillEmptyTranslationFields']) {
             // Add fallback text to empty values
             $arrValues = WidgetUtil::addFallbackValueToEmptyField($arrValues);
         }
 
         if (is_array($arrLanguageKeys) && count($arrLanguageKeys)) {
+            $objTranslation = null;
+
             foreach ($arrLanguageKeys as $strLanguageKey) {
                 // If current fid is correct
                 if (is_numeric($intFid) && $intFid > 0) {

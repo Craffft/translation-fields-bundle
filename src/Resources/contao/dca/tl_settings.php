@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+\Contao\System::loadLanguageFile('tl_settings');
+
 /**
  * Palettes
  */
