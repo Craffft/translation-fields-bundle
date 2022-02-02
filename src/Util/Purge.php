@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TranslationFields;
+namespace Craffft\TranslationFieldsBundle\Util;
 
 use Contao\Controller;
 use Contao\Database;
